@@ -1,4 +1,5 @@
 import 'package:cloud_9_agent/components/cards/matrix_card.dart';
+import 'package:cloud_9_agent/components/cards/wallet_card.dart';
 import 'package:cloud_9_agent/screens/booking_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -40,46 +41,7 @@ class WalletScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 50),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: MatrixCard(
-                          backgroundColor: Colors.orange[50],
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BookingScreen(),
-                                ));
-                          },
-                          subtitle: '30',
-                          title: 'Bookings',
-                          textColor: Colors.deepOrange,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: MatrixCard(
-                          backgroundColor: Colors.green[50],
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Container(),
-                                ));
-                          },
-                          subtitle: '1,200,000 /-',
-                          title: 'Wallet',
-                          textColor: Colors.green,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                WalletCard()
               ]),
         ),
       ),
