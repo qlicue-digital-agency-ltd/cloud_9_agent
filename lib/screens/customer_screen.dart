@@ -1,4 +1,6 @@
-import 'package:cloud_9_agent/components/tiles/booking_list_tile.dart';
+
+import 'package:cloud_9_agent/components/tiles/custome_list_tile.dart';
+import 'package:cloud_9_agent/models/customer.dart';
 import 'package:flutter/material.dart';
 
 import 'background.dart';
@@ -40,7 +42,7 @@ class CustomerScreen extends StatelessWidget {
                 collapseMode: CollapseMode.pin,
                 centerTitle: true,
                 title: Text(
-                  'My Appointments',
+                  'Customers',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -53,16 +55,13 @@ class CustomerScreen extends StatelessWidget {
               delegate: SliverChildBuilderDelegate((context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: BookingListTile(
-                    bookingListCardOnTap: () {
-                      print('----------ppppppp-----');
-                    },
-                    bookingMoreOnTap: () {
-                      print('---object-------');
-                    },
+                  child: CustomerListTile(
+                    customer: customerList[index],
+                    onDeleteTap: () {},
+                    onTap: () {},
                   ),
                 );
-              }, childCount: 5),
+              }, childCount: customerList.length),
             )
           ],
         ),

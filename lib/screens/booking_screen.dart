@@ -40,7 +40,7 @@ class BookingScreen extends StatelessWidget {
                 collapseMode: CollapseMode.pin,
                 centerTitle: true,
                 title: Text(
-                  'My Appointments',
+                  'Bookings',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
