@@ -1,16 +1,18 @@
+import 'package:cloud_9_agent/models/booking.dart';
 import 'package:flutter/material.dart';
 
 typedef BookingListTileOnTap = Function();
 
-
 class BookingListTile extends StatelessWidget {
   final BookingListTileOnTap bookingListCardOnTap;
   final BookingListTileOnTap bookingMoreOnTap;
+  final Booking booking;
 
   const BookingListTile(
       {Key key,
       @required this.bookingListCardOnTap,
-      @required this.bookingMoreOnTap})
+      @required this.bookingMoreOnTap,
+      @required this.booking})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -27,10 +29,10 @@ class BookingListTile extends StatelessWidget {
             ),
           ),
           title: Text(
-            'Tooth check',
+            booking.name,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          subtitle: Text('09 Jan 2020, sam-10am'),
+          subtitle: Text(booking.date + ' ' + booking.time),
           trailing: IconButton(
               icon: Icon(Icons.more_vert), onPressed: bookingMoreOnTap),
         ));

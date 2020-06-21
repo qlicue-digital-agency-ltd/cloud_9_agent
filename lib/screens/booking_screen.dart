@@ -1,4 +1,5 @@
 import 'package:cloud_9_agent/components/tiles/booking_list_tile.dart';
+import 'package:cloud_9_agent/models/booking.dart';
 import 'package:flutter/material.dart';
 
 import 'background.dart';
@@ -54,15 +55,12 @@ class BookingScreen extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: BookingListTile(
-                    bookingListCardOnTap: () {
-                      print('----------ppppppp-----');
-                    },
-                    bookingMoreOnTap: () {
-                      print('---object-------');
-                    },
+                    bookingListCardOnTap: () {},
+                    bookingMoreOnTap: () {},
+                    booking: bookingList[index],
                   ),
                 );
-              }, childCount: 5),
+              }, childCount: bookingList.length),
             )
           ],
         ),

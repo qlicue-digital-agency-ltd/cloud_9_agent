@@ -1,4 +1,6 @@
+import 'package:cloud_9_agent/components/cards/chart_card.dart';
 import 'package:cloud_9_agent/components/cards/dashboard_card.dart';
+import 'package:cloud_9_agent/components/cards/drop_down_card.dart';
 import 'package:cloud_9_agent/components/cards/matrix_card.dart';
 import 'package:cloud_9_agent/screens/booking_screen.dart';
 import 'package:cloud_9_agent/screens/customer_screen.dart';
@@ -133,6 +135,8 @@ class HomeScreen extends StatelessWidget {
                     )
                   ],
                 ),
+                DropdownCard(),
+                ChartCard()
               ]),
         ),
       ),
