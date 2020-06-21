@@ -56,7 +56,13 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: MatrixCard(
                           backgroundColor: Colors.blue[50],
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ));
+                          },
                           subtitle: '1,2000',
                           title: 'Customers',
                           textColor: Colors.blue,
@@ -68,7 +74,13 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: MatrixCard(
                           backgroundColor: Colors.red[50],
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ));
+                          },
                           subtitle: '300',
                           title: 'Transactions',
                           textColor: Colors.red,
@@ -84,7 +96,13 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: MatrixCard(
                           backgroundColor: Colors.orange[50],
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ));
+                          },
                           subtitle: '30',
                           title: 'Bookings',
                           textColor: Colors.deepOrange,
@@ -96,7 +114,13 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: MatrixCard(
                           backgroundColor: Colors.green[50],
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(),
+                                ));
+                          },
                           subtitle: '1,200,000 /-',
                           title: 'Wallet',
                           textColor: Colors.green,

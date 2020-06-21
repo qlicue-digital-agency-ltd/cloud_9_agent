@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'background.dart';
 
-class AppointmentScreen extends StatelessWidget {
+class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
