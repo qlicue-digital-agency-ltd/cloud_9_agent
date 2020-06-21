@@ -1,15 +1,13 @@
 import 'package:cloud_9_agent/components/cards/dashboard_card.dart';
 import 'package:cloud_9_agent/components/cards/matrix_card.dart';
 import 'package:cloud_9_agent/screens/booking_screen.dart';
-import 'package:cloud_9_agent/screens/customer_screen.dart';
 import 'package:cloud_9_agent/screens/transactions_screen.dart';
-import 'package:cloud_9_agent/screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'background.dart';
 
-class HomeScreen extends StatelessWidget {
+class WalletScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Background(
@@ -64,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CustomerScreen(),
+                                  builder: (context) => Container(),
                                 ));
                           },
                           subtitle: '1,2000',
@@ -122,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => WalletScreen(),
+                                  builder: (context) => Container(),
                                 ));
                           },
                           subtitle: '1,200,000 /-',
