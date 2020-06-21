@@ -1,5 +1,9 @@
 
+import 'package:cloud_9_agent/screens/account_screen.dart';
+import 'package:cloud_9_agent/screens/terms_and_condition.dart';
 import 'package:flutter/material.dart';
+
+import 'help_screen.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -36,11 +40,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   onTap: () {
                     print('object');
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => AccountScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AccountScreen(),
+                        ));
                   },
                   leading: Icon(Icons.account_box),
                   title: Text('Account'),
@@ -75,11 +79,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   onTap: () {
                     print('object');
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => HelpScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HelpScreen(),
+                        ));
                   },
                   leading: Icon(Icons.help),
                   title: Text('Help'),
@@ -91,11 +95,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   onTap: () {
                     print('object');
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => TermsAndConditionsScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TermsAndConditionsScreen(),
+                        ));
                   },
                   leading: Icon(Icons.book),
                   title: Text('Terms & Conditions'),
