@@ -1,5 +1,5 @@
-
-
+import 'package:cloud_9_agent/components/tiles/transaction_list_tile.dart';
+import 'package:cloud_9_agent/models/transaction.dart';
 import 'package:flutter/material.dart';
 
 import 'background.dart';
@@ -49,14 +49,14 @@ class TransactionScreen extends StatelessWidget {
               delegate: SliverChildBuilderDelegate((context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: TransactionListCard(
+                  child: TransactionListTile(
                     onDeleteTap: () {},
                     onViewTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReceiptScreen(),
-                          ));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => ReceiptScreen(),
+                      //     ));
                     },
                     transaction: transactionList[index],
                   ),

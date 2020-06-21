@@ -1,14 +1,15 @@
 
+import 'package:cloud_9_agent/models/transaction.dart';
 import 'package:flutter/material.dart';
 
-typedef TransactionListCardOnTap = Function();
+typedef TransactionListTileOnTap = Function();
 
-class TransactionListCard extends StatelessWidget {
-  final TransactionListCardOnTap onDeleteTap;
-  final TransactionListCardOnTap onViewTap;
+class TransactionListTile extends StatelessWidget {
+  final TransactionListTileOnTap onDeleteTap;
+  final TransactionListTileOnTap onViewTap;
   final Transaction transaction;
 
-  const TransactionListCard(
+  const TransactionListTile(
       {Key key,
       @required this.onDeleteTap,
       @required this.onViewTap,
