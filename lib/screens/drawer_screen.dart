@@ -1,7 +1,12 @@
 
+import 'package:cloud_9_agent/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../provider/auth_provider.dart';
 import 'package:cloud_9_agent/screens/account_screen.dart';
 import 'package:cloud_9_agent/screens/terms_and_condition.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'help_screen.dart';
 
@@ -20,6 +25,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthProvider>(context);
+    User user = _authProvider.authenticatedUser;
+
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width * 0.8,
@@ -32,13 +40,22 @@ class _DrawerScreenState extends State<DrawerScreen> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                   currentAccountPicture: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/lisa.jpeg')),
-                  accountName: Text('Hawa Ally'),
-                  accountEmail: Text('kalrobbynson@gmail.com')),
+                      backgroundImage: NetworkImage(user?.avatar == null ? '' :user.avatar,),onBackgroundImageError: (object,stackTrace){},),
+                  accountName: Text(user?.name == null ? "" : user.name),
+                  accountEmail: Text(user?.email == null ? "" : user.email)),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text('CODE: ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),),
+                    // Spacer(),
+                    Text(_authProvider.authenticatedUser.code,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),)
+                  ],
+                ),
+              ),
               Material(
                 child: ListTile(
                   onTap: () {
-                    print('object');
                     Navigator.pop(context);
                     Navigator.push(
                         context,
@@ -110,7 +127,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
               Material(
                 child: ListTile(
                   onTap: () {
-                    print('object');
+                    _authProvider.setIsSignInUser = false;
+                    SharedPreferences.getInstance().then((preference){
+                      preference.clear();
+                      Navigator.of(context).pushReplacementNamed('/');
+                    });
                   },
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Log Out'),

@@ -1,12 +1,15 @@
 import 'package:cloud_9_agent/components/tiles/transaction_list_tile.dart';
 import 'package:cloud_9_agent/models/transaction.dart';
+import 'package:cloud_9_agent/provider/utility_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'background.dart';
 
 class TransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    UtilityProvider _utilityProvider = Provider.of<UtilityProvider>(context);
     return Background(
         screen: SafeArea(
       child: Container(
@@ -58,10 +61,10 @@ class TransactionScreen extends StatelessWidget {
                       //       builder: (context) => ReceiptScreen(),
                       //     ));
                     },
-                    transaction: transactionList[index],
+                    transaction: _utilityProvider.transactions[index],
                   ),
                 );
-              }, childCount: transactionList.length),
+              }, childCount: _utilityProvider.transactions.length),
             )
           ],
         ),

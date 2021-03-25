@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DashboardCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final Color iconColor;
+
+  const DashboardCard({Key key,@required this.title,@required this.description, this.iconColor}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +25,7 @@ class DashboardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Stay home!',
+                      '$title',
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -28,7 +35,7 @@ class DashboardCard extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'Schedule an e-vist and discuss the plan with a doctor',
+                      '$description',
                       style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,
@@ -39,7 +46,7 @@ class DashboardCard extends StatelessWidget {
               ),
               Icon(
                 Icons.notifications,
-                color: Colors.white,
+                color: iconColor == null ? Colors.white : iconColor,
                 size: 100,
               )
             ]),

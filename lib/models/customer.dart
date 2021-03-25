@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
 
-class Customer {
+class Client {
   final int id;
   final String uuid;
-  final String fullname;
+  final String fullName;
   final String avatar;
+  final String phone;
+  final String email;
   bool isMyCustomer;
 
-  Customer({
+  Client({
     @required this.id,
     @required this.uuid,
-    @required this.fullname,
+    @required this.fullName,
     @required this.avatar,
+    @required this.phone,
+    @required this.email
   });
-}
 
-List<Customer> customerList = <Customer>[
-  Customer(
-      id: 1,
-      uuid: 'C93291PL',
-      fullname: 'Mr Allison George',
-      avatar: 'assets/images/matty.jpg'),
-  Customer(
-      id: 2,
-      uuid: 'C93789UL',
-      fullname: 'Mr Mason Greenwood',
-      avatar: 'assets/images/rob.png'),
-  Customer(
-      id: 3,
-      uuid: 'C99083PI',
-      fullname: 'Ms Lissa Kato',
-      avatar: 'assets/images/lisa.jpeg')
-];
+  static Client fromMap(Map<String, dynamic> clientMap){
+    return Client(
+        id : clientMap['id'],
+        uuid : clientMap['profile']['uuid'],
+        fullName : clientMap['profile']['fullname'],
+        avatar : clientMap['profile']['avatar'],
+        phone : "${clientMap['profile']['phone']}" ,
+        email : clientMap['email'],
+    );
+  }
+
+}

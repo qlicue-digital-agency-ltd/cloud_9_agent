@@ -1,4 +1,5 @@
 import 'package:cloud_9_agent/models/booking.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 typedef BookingListTileOnTap = Function();
@@ -19,22 +20,27 @@ class BookingListTile extends StatelessWidget {
     return Material(
         elevation: 1,
         borderRadius: BorderRadius.circular(15),
-        child: ListTile(
-          onTap: bookingListCardOnTap,
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.asset(
-              'assets/icons/calendar.png',
-              height: 80,
+        child: Column(
+          children: [
+            ListTile(
+              onTap: bookingListCardOnTap,
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.asset(
+                  'assets/icons/calendar.png',
+                  height: 80,
+                ),
+              ),
+              title: Text(booking.date),
+              subtitle: Text(' ${booking.startTime}',style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold)),
+              trailing: IconButton(
+                  icon: Icon(Icons.more_vert), onPressed: bookingMoreOnTap),
             ),
-          ),
-          title: Text(
-            booking.name,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(booking.date + ' ' + booking.time),
-          trailing: IconButton(
-              icon: Icon(Icons.more_vert), onPressed: bookingMoreOnTap),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(booking.service.title,style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            )
+          ],
         ));
   }
 }

@@ -6,7 +6,7 @@ typedef CustomerListTileOnTap = Function();
 class CustomerListTile extends StatelessWidget {
   final CustomerListTileOnTap onDeleteTap;
   final CustomerListTileOnTap onTap;
-  final Customer customer;
+  final Client customer;
 
   const CustomerListTile(
       {Key key,
@@ -30,9 +30,10 @@ class CustomerListTile extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
+                    child: Image.network(
                       customer.avatar,
                       height: 80,
+                      errorBuilder: (context,object,stackTrace) => Icon(Icons.person,size: 80),
                     ),
                   ),
                 ),
@@ -48,7 +49,7 @@ class CustomerListTile extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Text(customer.fullname),
+                        Text(customer.fullName),
                       ],
                     ),
                   ),

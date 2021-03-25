@@ -1,12 +1,17 @@
 import 'package:cloud_9_agent/components/tiles/booking_list_tile.dart';
 import 'package:cloud_9_agent/models/booking.dart';
+import 'package:cloud_9_agent/provider/utility_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'background.dart';
 
 class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    UtilityProvider _utilityProvider = Provider.of<UtilityProvider>(context);
+
     return Background(
         screen: SafeArea(
       child: Container(
@@ -57,10 +62,10 @@ class BookingScreen extends StatelessWidget {
                   child: BookingListTile(
                     bookingListCardOnTap: () {},
                     bookingMoreOnTap: () {},
-                    booking: bookingList[index],
+                    booking: _utilityProvider.bookings[index],
                   ),
                 );
-              }, childCount: bookingList.length),
+              }, childCount: _utilityProvider.bookings.length),
             )
           ],
         ),

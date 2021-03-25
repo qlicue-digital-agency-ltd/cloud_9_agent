@@ -31,7 +31,7 @@ class TransactionListTile extends StatelessWidget {
               child: Icon(
                 Icons.receipt,
                 color: Colors.blue,
-                size: 50,
+                size: 40,
               ),
             ),
           ),
@@ -44,9 +44,9 @@ class TransactionListTile extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     transaction.uuid,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                  Text(transaction.title),
+                  Text(transaction.title.replaceAll(r'App\', '')),
                 ],
               ),
             ),

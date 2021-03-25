@@ -1,34 +1,31 @@
+import 'package:cloud_9_agent/models/customer.dart';
+import 'package:cloud_9_agent/models/service.dart';
 import 'package:flutter/material.dart';
 
 class Booking {
   final int id;
-  final String name;
-  final String date;
-  final String time;
   bool isMyBooking;
+  String startTime;
+  String endTime;
+  String date;
+  String status;
+  Service service;
 
-  Booking({
-    @required this.id,
-    @required this.name,
-    @required this.date,
-    @required this.time,
-  });
+  Booking(
+      {@required this.id,
+      @required this.startTime,
+      @required this.date,
+      @required this.endTime,
+      @required this.service});
 }
 
 List<Booking> bookingList = <Booking>[
   Booking(
       id: 1,
-      name: 'HAIR RESTORATION',
-      date: '09 jan 2020',
-      time: '7 am - 10 am'),
-  Booking(
-      id: 2,
-      name: 'Lip microblading',
-      date: '20 Agust 2020',
-      time: '12 am - 04 pm'),
-  Booking(
-      id: 3,
-      name: 'PERMANENT HAIR REMOVAL',
-      date: '19 July 2020',
-      time: '04 pm - 07 pm')
+      date: '2020-01-09',
+      startTime: '07:05:00',
+      endTime: '11:30:00',
+    service: Service(id: 1, title: 'Title', body: 'Body')
+  ),
+
 ];

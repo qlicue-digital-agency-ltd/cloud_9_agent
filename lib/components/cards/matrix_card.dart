@@ -8,6 +8,7 @@ class MatrixCard extends StatelessWidget {
   final String title;
   final Color backgroundColor;
   final MatrixCardOnTap onTap;
+  final bool isLoading;
 
   const MatrixCard(
       {Key key,
@@ -15,7 +16,8 @@ class MatrixCard extends StatelessWidget {
       @required this.title,
       @required this.textColor,
       @required this.backgroundColor,
-      @required this.onTap})
+      @required this.onTap,
+      this.isLoading = false})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,11 @@ class MatrixCard extends StatelessWidget {
               color: backgroundColor,
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Stack(children: <Widget>[
+            isLoading ? Center(child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(),
+            ),) : Container(),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(title, style: TextStyle(color: textColor,fontSize: 18)),
