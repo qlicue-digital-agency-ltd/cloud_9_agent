@@ -24,9 +24,9 @@ import 'package:provider/provider.dart';
 import 'background.dart';
 
 class HomeScreen extends StatelessWidget {
-  ProductProvider _productProvider;
-  ServiceProvider _serviceProvider;
 
+
+  bool _isLoading = false;
   bool onLand = true;
 
   @override
@@ -34,12 +34,13 @@ class HomeScreen extends StatelessWidget {
     final _utilityProvider = Provider.of<UtilityProvider>(context);
     final _authProvider = Provider.of<AuthProvider>(context);
     final _clientProvider = Provider.of<ClientProvider>(context);
-    _productProvider = Provider.of<ProductProvider>(context);
-    _serviceProvider = Provider.of<ServiceProvider>(context);
+    final _productProvider = Provider.of<ProductProvider>(context);
+    final _serviceProvider = Provider.of<ServiceProvider>(context);
     final _orderProvider = Provider.of<OrderProvider>(context);
     final _appointmentProvider = Provider.of<AppointmentProvider>(context);
 
     //   _utilityProvider.getAgentInfo();
+
 
     return FutureBuilder(
         builder: (context, projectSnap) {
@@ -78,19 +79,17 @@ class HomeScreen extends StatelessWidget {
                             height: 50,
                             width: 50,
                             decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                    _authProvider.authenticatedUser?.avatar ==
-                                            null
-                                        ? ''
-                                        : _authProvider
-                                            .authenticatedUser.avatar,
-                                  ),
-                                  onError: (object, stackTrace) {}),
-                            ),
+                                color: Colors.blue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        _authProvider.authenticatedUser.avatar),
+                                    onError: (object, stackTrace) => Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 20))),
                           ),
                         ),
                         SizedBox(height: 50),
@@ -125,141 +124,188 @@ class HomeScreen extends StatelessWidget {
                                 iconColor: Colors.red,
                               ),
                         SizedBox(height: 20),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading:
-                                      _productProvider.isFetchingProductData,
-                                  backgroundColor: Colors.blue[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ProductScreen(),
-                                        ));
+                        _authProvider.isAgent
+                            ? Column(
+                                children: [
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading: _productProvider
+                                                .isFetchingProductData,
+                                            backgroundColor: Colors.blue[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProductScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_productProvider.availableProducts.length}',
+                                            title: 'Products',
+                                            textColor: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading: _serviceProvider
+                                                .isFetchingServiceData,
+                                            backgroundColor: Colors.red[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ServiceScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_serviceProvider.availableServices.length}',
+                                            title: 'Services',
+                                            textColor: Colors.red,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading:
+                                                _appointmentProvider.isLoading,
+                                            backgroundColor: Colors.red[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AppointmentScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_appointmentProvider.availableAppointments.length}',
+                                            title: 'Appointments',
+                                            textColor: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading:
+                                                _clientProvider.isLoading,
+                                            backgroundColor: Colors.blue[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CustomerScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_clientProvider.clients.length}',
+                                            title: 'Customers',
+                                            textColor: Colors.blue,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading: _orderProvider.isLoading,
+                                            backgroundColor: Colors.orange[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrderScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_orderProvider.availableOrders.length}',
+                                            title: 'Orders',
+                                            textColor: Colors.deepOrange,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: MatrixCard(
+                                            isLoading:
+                                                _utilityProvider.isLoading,
+                                            backgroundColor: Colors.green[50],
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WalletScreen(),
+                                                  ));
+                                            },
+                                            subtitle:
+                                                '${_utilityProvider?.myWallet?.amount}',
+                                            title: 'Wallet',
+                                            textColor: Colors.green,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: StatefulBuilder(
+                                  builder: (BuildContext context,
+                                      StateSetter setState) {
+                                    return ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
+                                        _authProvider
+                                            .getUserRole()
+                                            .then((response) {
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
+                                          showInSnackBar(response['message'],
+                                              context: context,
+                                              color: response['isAgent']
+                                                  ? Colors.green
+                                                  : Colors.red);
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: _isLoading
+                                            ? CircularProgressIndicator(
+                                                backgroundColor: Colors.white,
+                                              )
+                                            : Text('Refresh '),
+                                      ),
+                                    );
                                   },
-                                  subtitle:
-                                      '${_productProvider.availableProducts.length}',
-                                  title: 'Products',
-                                  textColor: Colors.blue,
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading:
-                                      _serviceProvider.isFetchingServiceData,
-                                  backgroundColor: Colors.red[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ServiceScreen(),
-                                        ));
-                                  },
-                                  subtitle:
-                                      '${_serviceProvider.availableServices.length}',
-                                  title: 'Services',
-                                  textColor: Colors.red,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading: _appointmentProvider.isLoading,
-                                  backgroundColor: Colors.red[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AppointmentScreen(),
-                                        ));
-                                  },
-                                  subtitle:
-                                      '${_appointmentProvider.availableAppointments.length}',
-                                  title: 'Appointments',
-                                  textColor: Colors.red,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading: _clientProvider.isLoading,
-                                  backgroundColor: Colors.blue[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CustomerScreen(),
-                                        ));
-                                  },
-                                  subtitle: '${_clientProvider.clients.length}',
-                                  title: 'Customers',
-                                  textColor: Colors.blue,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading: _orderProvider.isLoading,
-                                  backgroundColor: Colors.orange[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => OrderScreen(),
-                                        ));
-                                  },
-                                  subtitle:
-                                      '${_orderProvider.availableOrders.length}',
-                                  title: 'Orders',
-                                  textColor: Colors.deepOrange,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: MatrixCard(
-                                  isLoading: _utilityProvider.isLoading,
-                                  backgroundColor: Colors.green[50],
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => WalletScreen(),
-                                        ));
-                                  },
-                                  subtitle:
-                                      '${_utilityProvider?.myWallet?.amount}',
-                                  title: 'Wallet',
-                                  textColor: Colors.green,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
                       ]),
                 ),
               ),
@@ -270,14 +316,20 @@ class HomeScreen extends StatelessWidget {
             utilityProvider: _utilityProvider,
             clientProvider: _clientProvider,
             orderProvider: _orderProvider,
-        appointmentProvider: _appointmentProvider));
+            appointmentProvider: _appointmentProvider,
+            authProvider: _authProvider,
+            productProvider: _productProvider,
+            serviceProvider: _serviceProvider));
   }
 
-  void showInSnackBar(String value, {@required BuildContext context}) {
+  void showInSnackBar(String value,
+      {@required BuildContext context, Color color}) {
     FocusScope.of(context).requestFocus(new FocusNode());
 
-    Scaffold.of(context).removeCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(new SnackBar(
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+    // Scaffold.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
       content: new Text(
         value,
         textAlign: TextAlign.center,
@@ -286,7 +338,7 @@ class HomeScreen extends StatelessWidget {
             fontSize: 16.0,
             fontFamily: "WorkSansSemiBold"),
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: color ?? Colors.red,
       duration: Duration(seconds: 3),
     ));
   }
@@ -295,19 +347,22 @@ class HomeScreen extends StatelessWidget {
       {@required UtilityProvider utilityProvider,
       @required ClientProvider clientProvider,
       @required OrderProvider orderProvider,
-      @required AppointmentProvider appointmentProvider}) async {
+      @required ProductProvider productProvider,
+      @required ServiceProvider serviceProvider,
+      @required AppointmentProvider appointmentProvider,
+      @required AuthProvider authProvider}) async {
     if (onLand) {
       onLand = false;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        // authProvider.getUserRole();
         clientProvider.getAgentClients();
 
         utilityProvider.getAgentInfo();
-        _productProvider.fetchProducts();
-        _serviceProvider.fetchServices();
+        productProvider.fetchProducts();
+        serviceProvider.fetchServices();
         orderProvider.fetchAgentOrders();
         appointmentProvider.fetchAgentAppointments();
-
       });
     }
   }

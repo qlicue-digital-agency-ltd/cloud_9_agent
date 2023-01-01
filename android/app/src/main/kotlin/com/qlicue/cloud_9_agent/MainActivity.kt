@@ -1,4 +1,4 @@
-package com.example.cloud_9_agent
+package com.qlicue.cloud_9_agent
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

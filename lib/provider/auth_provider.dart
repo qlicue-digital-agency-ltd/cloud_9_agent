@@ -128,8 +128,9 @@ class AuthProvider with ChangeNotifier {
         if(responseData['user']['roles'].indexWhere((role) => role['name'] == 'Agent') == -1){
           preferences.setBool(User.IS_AGENT, false);
           _isAgent = false;
-          _msg = 'You are not an Agent, This app was for Cloud 9 agent user';
+          _msg = 'You are not an Agent';
         }else{
+          _msg = 'You are now authorized Agent';
           _isAgent = true;
           preferences.setBool(User.IS_AGENT, true);
         }
@@ -145,6 +146,95 @@ class AuthProvider with ChangeNotifier {
         return {'success': false, 'message': _message};
       }
     }
+  }
+
+  Future<Map<String,dynamic>> getUser() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try {
+      HttpData httpResponse = await HttpHandler.httpGet(url: "${api}get_user");
+
+      log(authenticatedUser.token,name: 'token');
+      log('UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
+      // log(httpResponse.responseBody['user']['roles'].toString(), name: 'User Roles');
+      if(httpResponse.responseBody['user']['roles'].indexWhere((role) => role['name'] == 'Agent') == -1){
+        log('NOT AGENT');
+
+
+        if(preferences.getBool(User.IS_AGENT)){
+          preferences.setBool(User.IS_AGENT,  false);
+          log('Is agent updated (false)');
+        }
+        _isAgent = false;
+        notifyListeners();
+      }else{
+        if(!preferences.getBool(User.IS_AGENT)){
+          preferences.setBool(User.IS_AGENT,  true);
+          log('Is agent updated (true)');
+        }
+        log('AN AGENT');
+        _isAgent = true;
+        notifyListeners();
+      }
+      final Map<String, dynamic> data = httpResponse.responseBody;  //json.decode(response.body);
+
+
+      return {'code': httpResponse.statusCode ,'status': data['status'],'message': data['message']};
+
+    } catch (error) {
+      log(error,name: 'An ERROR OCCURRED');
+      _isAgent = preferences.getBool(User.IS_AGENT);
+      notifyListeners();
+      return {'code': 400,'status': false, 'message': 'An error occurred'};
+    }
+
+  }
+
+
+  Future<Map<String,dynamic>> getUserRole() async {
+    HttpData httpResponse = await HttpHandler.httpGet(url: "${api}userRoles/${authenticatedUser.id}");
+    log(httpResponse.responseBody.toString(),name: 'USER ROLES');
+    String _msg = httpResponse.message;
+    // if(httpResponse.responseBody['roles'].length > 0 ){
+    //   _isAgent = false;
+    //   _msg = 'You are not an authorized Agent yet';
+    // }
+    // else
+
+    bool _newIsAgent = false;
+    if(httpResponse.hasError){
+      _newIsAgent = _isAgent;
+      return {'message': _msg,'success': !httpResponse.hasError,'isAgent': _isAgent};
+    }
+
+      if(httpResponse.responseBody['roles'].indexWhere((role) => role['name'] == 'Agent') == -1){
+
+      _newIsAgent = false;
+      _msg = 'You are not an authorized Agent yet';
+    }else{
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      _newIsAgent = true;
+      if(_newIsAgent != _isAgent){
+        Map<String,dynamic> responseData = httpResponse.responseBody;
+        User user = User(
+          id: responseData['user']['id'],
+          email: responseData['user']['email'],
+          token: authenticatedUser.token,
+          profileId: responseData['user']['profile']['id'],
+          name: responseData['user']['profile']['fullname'],
+          phone: '${responseData['user']['profile']['phone']}',
+          avatar: responseData['user']['profile']['avatar'],
+          code: responseData['user']['profile']['uuid'],
+        );
+        _authenticatedUser = user;
+        preferences.setString(User.USER_JSON, user.toString());
+        preferences.setBool(User.IS_AGENT, _newIsAgent ? true: false);
+        print('USER ROLE UPDATED !!!!!!!!!!');
+      }
+
+    }
+      _isAgent = _newIsAgent;
+      notifyListeners();
+    return {'message': _msg,'success': !httpResponse.hasError,'isAgent': _isAgent};
   }
 
   Future<Map<String, dynamic>> registerUser(

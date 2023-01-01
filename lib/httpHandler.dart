@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
+import 'models/user.dart';
+
 /// The [Duration] on which the request will tried out
 final Duration requestTimeoutLimit = Duration(seconds: 90);
 
@@ -26,7 +28,11 @@ class HttpHandler {
   static Future<HttpData> httpGet({@required String url}) async {
     final httpResponse = HttpData();
     try {
-      Response response = await get(url).timeout(requestTimeoutLimit);
+      Response response = await get(url,
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/json',
+            HttpHeaders.authorizationHeader: 'Bearer ${TokenService().token}'
+          }).timeout(requestTimeoutLimit);
       httpResponse.statusCode = response.statusCode;
       httpResponse.responseBody = json.decode(response.body);
       httpResponse.hasError = false;
@@ -56,12 +62,15 @@ class HttpHandler {
   static Future<HttpData> httpPost(
       {@required String url,
         @required Map<String, dynamic> postBody,
-        Map<String, String> header = HttpHeaders.CONTENT_TYPE_JSON}) async {
+        Map<String, String> header }) async {
     final _httpData = HttpData();
     Response response;
     try {
       response = await post(url,
-          headers: header,
+          headers: header ??  {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ${TokenService().token}'
+          },
           body: jsonEncode(postBody))
           .timeout(requestTimeoutLimit);
       _httpData.statusCode = response.statusCode;
@@ -105,11 +114,15 @@ class HttpHandler {
 
   static Future<HttpData> httpSendDataWithImage({@required String filePath,@required String fileKey,@required String url,@required String method,
     @required Map<String, String> postBody,
-    Map<String, dynamic> header = HttpHeaders.CONTENT_TYPE_JSON}) async {
+    Map<String, dynamic> header }) async {
     var request = MultipartRequest(method, Uri.parse(url));
 
     request.files.add(await MultipartFile.fromPath(fileKey, filePath));
     request.fields.addAll(postBody);
+    request.headers.addAll(header ?? {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer ${TokenService().token}'
+    });
 
     final _httpData = HttpData();
     StreamedResponse response;
@@ -150,11 +163,14 @@ class HttpHandler {
   Future<HttpData> httpPut(
       {@required String url,
         @required Map<String, dynamic> postBody,
-        Map<String, dynamic> header = HttpHeaders.CONTENT_TYPE_JSON}) async {
+        Map<String, dynamic> header}) async {
     final _httpData = HttpData();
     try {
       Response response = await put(url,
-          headers: HttpHeaders.CONTENT_TYPE_JSON,
+          headers: header ??   {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ${TokenService().token}'
+          },
           body: jsonEncode(postBody))
           .timeout(requestTimeoutLimit);
       _httpData.statusCode = response.statusCode;
@@ -186,11 +202,14 @@ class HttpHandler {
   //<editor-fold desc="Post Data to the URL">
   Future<HttpData> httpDelete(
       {@required String url,
-        Map<String, dynamic> header = HttpHeaders.CONTENT_TYPE_JSON}) async {
+        Map<String, dynamic> header }) async {
     final _httpData = HttpData();
     try {
       Response response = await delete(url,
-          headers: HttpHeaders.CONTENT_TYPE_JSON)
+          headers: header ??  {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.authorizationHeader: 'Bearer ${TokenService().token}'
+          })
           .timeout(requestTimeoutLimit);
       _httpData.statusCode = response.statusCode;
       _httpData.responseBody = json.decode(response.body);
@@ -236,9 +255,22 @@ class HttpData {
 }
 //</editor-fold>
 
+class TokenService {
+  String token;
+  User authUser;
 
-class HttpHeaders {
-  static const Map<String, String> CONTENT_TYPE_JSON = {
-    'Content-Type': 'application/json'
-  };
+  TokenService._privateConstructor();
+
+  static final TokenService _instance = TokenService._privateConstructor();
+
+  factory TokenService() {
+    return _instance;
+  }
+
 }
+
+// class HttpHeaders {
+//   static const Map<String, String> CONTENT_TYPE_JSON = {
+//     'Content-Type': 'application/json'
+//   };
+// }

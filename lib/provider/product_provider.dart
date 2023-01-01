@@ -2,8 +2,8 @@ import 'package:cloud_9_agent/api/api.dart';
 import 'package:cloud_9_agent/models/order.dart';
 import 'package:cloud_9_agent/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import '../httpHandler.dart';
 
 class ProductProvider with ChangeNotifier {
   //constructor
@@ -47,11 +47,12 @@ class ProductProvider with ChangeNotifier {
 
     final List<Product> _fetchedProducts = [];
     try {
-      final http.Response response = await http.get(api + "products");
+      HttpData httpResponse = await HttpHandler.httpGet(url: api + "products");
+     // final http.Response response = await http.get(api + "products");
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = httpResponse.responseBody;//json.decode(response.body);
 
-      if (response.statusCode == 200) {
+      if (httpResponse.statusCode == 200) {
         data['products'].forEach((productData) {
           final product = Product.fromMap(productData);
           _fetchedProducts.add(product);
@@ -81,11 +82,12 @@ class ProductProvider with ChangeNotifier {
 
     final List<Order> _fetchedOrders = [];
     try {
-      final http.Response response = await http.get(api + "orders");
+      HttpData httpResponse = await HttpHandler.httpGet(url: "${api}orders");
+      // final http.Response response = await http.get(api + "orders");
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = httpResponse.responseBody;//json.decode(response.body);
 
-      if (response.statusCode == 200) {
+      if (httpResponse.statusCode == 200) {
         data['orders'].forEach((orderData) {
           final order = Order.fromMap(orderData);
           _fetchedOrders.add(order);
@@ -247,15 +249,17 @@ class ProductProvider with ChangeNotifier {
       'total_amount': totalAmount
     };
     try {
-      final http.Response response = await http.post(
-        api + "order/" + userId.toString(),
-        body: json.encode(appointmentData),
-        headers: {'Content-Type': 'application/json'},
-      );
+      // final http.Response response = await http.post(
+      //   api + "order/" + userId.toString(),
+      //   body: json.encode(appointmentData),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      HttpData httpResponse = await HttpHandler.httpPost(url: api + "order/" + userId.toString(), postBody: appointmentData);
 
-      if (response.statusCode == 201) {
+      final Map<String, dynamic> data = httpResponse.responseBody; //json.decode(response.body);
+
+      if (httpResponse.statusCode == 201) {
         print(data);
         _clearCart();
         hasError = false;

@@ -303,6 +303,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       if (response['success']) {
         authProvider.setIsSignInUser = true;
+
         authProvider.setAuthenticatedUser = response['user'];
         showInSnackBar(response['message']);
         if (authProvider.authenticatedUser?.name == null)

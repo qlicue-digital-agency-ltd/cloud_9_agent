@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_9_agent/api/api.dart';
+import 'package:cloud_9_agent/httpHandler.dart';
 import 'package:cloud_9_agent/models/user.dart';
 import 'package:cloud_9_agent/pages/auth/profile_page.dart';
 import 'package:cloud_9_agent/pages/auth/register_page.dart';
@@ -34,7 +35,6 @@ class _AppState extends State<App> {
 
         if(snapshot.hasData){
 
-          print ('Is SigneInUser: ${_authProvider.isSignInUser}');
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Cloud 9 Agent',
@@ -74,13 +74,27 @@ class _AppState extends State<App> {
            authProvider.setIsSignInUser = true;
            authProvider.setAuthenticatedUser = user;
            _hasUser = true;
-           if(sharedPreferences.containsKey(User.IS_AGENT))
-             authProvider.setIsAgent = sharedPreferences.getBool(User.IS_AGENT);
-           else authProvider.setIsAgent = false;
+           TokenService().token = user.token;
+           TokenService().authUser = user;
+           authProvider.getUser().then((response) {
+             if(response['code'] == 403){
+               switch (response['message']) {
+                 case 'Token Invalid':
+                 case 'Token Exception':
+                   print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+                   print("Log Me Out");
+                   // _authProvider.logout();
+                   // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                   break;
+               }
+             }
+           });
+
          } catch (error) {
            authProvider.setIsSignInUser = false;
          }
        } else {
+
          authProvider.setIsSignInUser = false;
        }
        return _hasUser;

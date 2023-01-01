@@ -4,7 +4,7 @@ import 'package:cloud_9_agent/models/user.dart';
 import 'package:cloud_9_agent/models/mno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_country_picker/country.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'package:cloud_9_agent/httpHandler.dart';
 import 'dart:convert';
 
@@ -78,12 +78,15 @@ class OrderProvider with ChangeNotifier {
 
     final List<Order> _fetchedOrders = [];
     try {
-      final http.Response response =
-          await http.get(api + "orders/" + clientId.toString());
+      // final http.Response response =
+      //     await http.get(api + "orders/" + clientId.toString());
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final HttpData httpResponse =
+          await HttpHandler.httpGet(url: api + "orders/" + clientId.toString());
 
-      if (response.statusCode == 200) {
+      final Map<String, dynamic> data = httpResponse.responseBody; //json.decode(response.body);
+
+      if (httpResponse.statusCode == 200) {
         print(data.toString());
         data['orders'].forEach((orderData) {
           final order = Order.fromMap(orderData);
@@ -131,14 +134,17 @@ class OrderProvider with ChangeNotifier {
       return true;
     }
 
-    final http.Response response = await http.post(
-      "${api}selcom/order/create",
-      body: json.encode(authData),
-      headers: {'Content-Type': 'application/json'},
+    // final http.Response response = await http.post(
+    //   "${api}selcom/order/create",
+    //   body: json.encode(authData),
+    //   headers: {'Content-Type': 'application/json'},
+    // );
+    final HttpData httpResponse = await HttpHandler.httpPost(
+      url: "${api}selcom/order/create",
+      postBody: authData,
     );
 
-    print(response.body.toString());
-    final Map<String, dynamic> responseData = json.decode(response.body);
+    final Map<String, dynamic> responseData = httpResponse.responseBody; //json.decode(response.body);
     bool hasError = true;
 
     if (responseData.containsKey('order')) {
@@ -163,17 +169,19 @@ class OrderProvider with ChangeNotifier {
     }
     final Map<String, dynamic> _data = {'order_id': orderId, 'phone': phone};
 
-    final http.Response response = await http.post(
-      "${api}selcom/order/pay",
-      body: json.encode(_data),
-      headers: {'Content-Type': 'application/json'},
+    // final http.Response response = await http.post(
+    //   "${api}selcom/order/pay",
+    //   body: json.encode(_data),
+    //   headers: {'Content-Type': 'application/json'},
+    // );
+    final HttpData httpResponse = await HttpHandler.httpPost(
+      url: "${api}selcom/order/pay",
+      postBody: _data,
     );
 
-    final Map<String, dynamic> responseData = json.decode(response.body);
+    final Map<String, dynamic> responseData = httpResponse.responseBody; //json.decode(response.body);
     bool hasError = true;
-    print('++++++++++++++++++++++++++++++');
-    print(responseData);
-    print('++++++++++++++++++++++++++++++');
+
     notifyListeners();
     if (!responseData.containsKey('status')) {
       if (!responseData['status'])
@@ -184,7 +192,7 @@ class OrderProvider with ChangeNotifier {
         };
     }
     if (responseData['transaction']['result_code'] == '000')
-      print('TTTTTTTRRRRRUUUUUEEEEE');
+
     return {
       'status': responseData['status'],
       'message': responseData['transaction']['message'],

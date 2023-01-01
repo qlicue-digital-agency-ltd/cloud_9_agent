@@ -2,7 +2,7 @@ import 'package:cloud_9_agent/api/api.dart';
 import 'package:cloud_9_agent/models/appointment.dart';
 import 'package:cloud_9_agent/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cloud_9_agent/httpHandler.dart';
 import '../provider/auth_provider.dart';
@@ -12,7 +12,7 @@ import 'dart:developer';
 class AppointmentProvider with ChangeNotifier {
 AuthProvider _authProvider;
   void update(AuthProvider _authProvider){
-    _authProvider = _authProvider;
+    this._authProvider = _authProvider;
     authenticatedUser = _authProvider.authenticatedUser;
   }
 
@@ -44,15 +44,13 @@ AuthProvider _authProvider;
 
     final List<Appointment> _fetchedAppointments = [];
     try {
-      final http.Response response =
-          await http.get(api + "appointment/client/" + clientId.toString());
+      // final http.Response response =
+      //     await http.get(api + "appointment/client/" + clientId.toString());
+      final HttpData httpResponse = await HttpHandler.httpGet(url: api + "appointment/client/" + clientId.toString());
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = httpResponse.responseBody; //json.decode(response.body);
 
-      print('RRRRRRRRR');
-      print(data);
-
-      if (response.statusCode == 200) {
+      if (httpResponse.statusCode == 200) {
         data['appointments'].forEach((appointmentData) {
           final appointment = Appointment.fromMap(appointmentData);
           _fetchedAppointments.add(appointment);
@@ -102,16 +100,20 @@ AuthProvider _authProvider;
     print(appointmentData);
     print("+++++++++++++++++++++++");
     try {
-      final http.Response response = await http.post(
-        api + "procedure/appointment/" + serviceId.toString(),
-        body: json.encode(appointmentData),
-        headers: {'Content-Type': 'application/json'},
+      // final http.Response response = await http.post(
+      //   api + "procedure/appointment/" + serviceId.toString(),
+      //   body: json.encode(appointmentData),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
+      final HttpData httpResponse = await HttpHandler.httpPost(
+        url: api + "procedure/appointment/" + serviceId.toString(),
+        postBody: appointmentData,
       );
 
-      final Map<String, dynamic> data = json.decode(response.body);
-      print('RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
-      print(data);
-      if (response.statusCode == 201) {
+      final Map<String, dynamic> data = httpResponse.responseBody; //json.decode(response.body);
+      // print('RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
+      // print(data);
+      if (httpResponse.statusCode == 201) {
         // print(data);
          _appointment = Appointment.fromMap(data['appointment']);
         hasError = false;
@@ -156,18 +158,21 @@ AuthProvider _authProvider;
     print("+++++++++++++++++++++++");
     print(appointmentData);
     try {
-      final http.Response response = await http.post(
-        api + "consultation/appointment/" + consultationId.toString(),
-        body: json.encode(appointmentData),
-        headers: {'Content-Type': 'application/json'},
+      // final http.Response response = await http.post(
+      //   api + "consultation/appointment/" + consultationId.toString(),
+      //   body: json.encode(appointmentData),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
+      final HttpData httpResponse = await HttpHandler.httpPost(
+        url: api + "consultation/appointment/" + consultationId.toString(),
+        postBody: appointmentData,
       );
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = httpResponse.responseBody; //json.decode(response.body);
 
-      print('RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
-      print(data);
 
-      if (response.statusCode == 201) {
+
+      if (httpResponse.statusCode == 201) {
         print(data);
         hasError = false;
       }
@@ -191,14 +196,19 @@ AuthProvider _authProvider;
     notifyListeners();
     HttpData httpData = await HttpHandler.httpGet(url: '${api}appointments/${authenticatedUser.code}');
 
-    _availableAppointments.clear();
-    httpData.responseBody['bookings'].forEach((appointment){
-      _availableAppointments.add(
-        Appointment.fromMap(appointment)
-      );
-    });
-    isLoading = false;
-    notifyListeners();
+    try {
+      _availableAppointments.clear();
+      httpData.responseBody['bookings'].forEach((appointment) {
+        _availableAppointments.add(
+            Appointment.fromMap(appointment)
+        );
+      });
+      isLoading = false;
+      notifyListeners();
+    }catch(e){
+      isLoading = false;
+      notifyListeners();
+    }
 
   }
 }

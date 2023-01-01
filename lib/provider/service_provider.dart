@@ -1,8 +1,8 @@
 import 'package:cloud_9_agent/api/api.dart';
+import 'package:cloud_9_agent/httpHandler.dart';
 import 'package:cloud_9_agent/models/service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 class ServiceProvider with ChangeNotifier {
 
@@ -27,12 +27,13 @@ class ServiceProvider with ChangeNotifier {
 
     final List<Service> _fetchedServices = [];
     try {
-      final http.Response response = await http.get(api + "services");
+      // final http.Response response = await http.get(api + "services");
+      final HttpData httpResponse = await HttpHandler.httpGet(url: api + "services");
 
-      final Map<String, dynamic> data = json.decode(response.body);
+      final Map<String, dynamic> data = httpResponse.responseBody;  //json.decode(response.body);
 
 
-      if (response.statusCode == 200) {
+      if (httpResponse.statusCode == 200) {
         data['services'].forEach((serviceData) {
           final service = Service.fromMap(serviceData);
           _fetchedServices.add(service);
